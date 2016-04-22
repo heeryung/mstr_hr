@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Exprmnt{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hi, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+	{% if not known %}
+	<p> Pleased to meet you. If this is not your first visit, or if your name is wrongly presented above, please contact via (isbead@gmail.com, 010-9628-1336). </p>
+	{% else %}
+	<p> Glad to meet you again. If this is your first visit, or if your name is wrongly presented above, please contact via (isbead@gmail.com, 010-9628-1336).</p>
+	{% endif %}
+</div>
+{{ wtf.quick_form(form) }}
+{% endblock %}

@@ -28,8 +28,7 @@ class User(UserMixin, db.Model):
     code = db.Column(db.String(64), unique=True, index=True)
     age = db.Column(db.Integer, unique=True, index=True)
     sex = db.Column(db.String(40), index=True)
-    
-    
+
     confirmed = db.Column(db.Boolean, default=False)
 
 

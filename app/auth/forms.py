@@ -23,9 +23,8 @@ class RegistrationForm(Form):
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[Required()])
     code = StringField('Code', validators = [Required(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Code must be given by the researcher')])
-    age = IntegerField('Age', validators=[Required(), Length(1, 2), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Only numbers can be used.')])
+                                          'Put the code that given by the researcher')])
+    age = IntegerField(u'Age', validators=[Required()])
     sex = SelectField(u'Sex', choices=[('F', 'Female'), ('M', 'Male')], validators=[Required()] )                                      
     
     submit = SubmitField('Register')

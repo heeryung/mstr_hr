@@ -1,7 +1,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
 from . import db, login_manager
-
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 
 class Role(db.Model):
@@ -23,6 +24,41 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 #password    
     password_hash = db.Column(db.String(128))
+#additional information
+    code = db.Column(db.String(64), unique=True, index=True)
+    age = db.Column(db.Integer, unique=True, index=True)
+    sex = db.Column(db.String(40), index=True)
+    
+    
+    confirmed = db.Column(db.Boolean, default=False)
+
+
+#generate a token with a default validity time of one hour
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({ 'confirm': self.id })
+        
+    
+#verifies token and, if valid, sets the new confirmed attribute to True
+    def confirm(self, token) :
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except :
+            return False
+        if data.get('confirm') !=self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
+        
+# after every new account is added, a new database migration needs to be generated and applied.
+        
+    
+    
+    
+    
+    
     
     @property 
     def password(self):

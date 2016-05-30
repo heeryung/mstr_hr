@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<a href="class_n.html" id="" title="class_n">class_s</a>
+{% block title %}Exprmnt{% endblock %}
+
+{% block page_content %}
+<div class="page-body">
+	<video width = "320" height = "240" controls>
+		<source src="movie.mp4" type="video/mp4">
+		Your browser does not support the video tag.
+	</video>    
+	<p><strong>Note:</strong> The video tag is not supported in Internet Explorer 8 and earlier versions.</p>
+</div>
+
+
+
+
+
+
+{{ wtf.quick_form(form) }}
+{% endblock %}

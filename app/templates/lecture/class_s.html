@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<a href="class_s.html" id="" title="class_s">class_s</a>
+{% block title %}Classroom{% endblock %}
+
+{% block page_content %}
+<script type = "text/javascript">
+
+//lightbulbs 만드는 법
+function lightbulbs(src, width, height, alt, number) {
+	this.src = "../../static/offline.png";
+	this.width = "50"; 
+	this.height ="50"; 
+	this.alt = "user status"
+	this.number = 0
+}
+
+
+//lightbulb 바꾸는 법
+function changeImage() {
+	x = Math.floor(Math.random() * 100) + 1
+	var images = ["../../static/online.png","../../static/offline.png"]
+	
+	var renew = setInterval(function() {
+		//online
+		if (x%2 == 0) {
+			document.getElementByClassName("lightbulb").src = images[0];
+		}
+		
+		//offline	
+		else {
+			document.getElementByClassName("lightbulb").src = images[1];
+		}
+	}, 30000);	
+}
+
+
+function fadeImg(el, val, fade) {
+	if(fade === true) {
+		el.style.opacity = val/100;
+		seTimeout(function(){fadeImg(el, val, fade);}, 10);		
+	}
+}
+	
+</script>
+	
+<div class="page-social">
+	<p> 
+<script type = "text/javascript">
+		for (var i=0, i < 10, i++) {
+			lightbulbs(src, width, height, alt, i);
+		}
+		
+</script>		
+
+
+		
+</div>
+
+<div class="page-body">
+	<div class="video">
+		<video width = "320" height = "240" controls>
+			<source src="movie.mp4" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>    
+	</div>
+</div>
+		
+	<p><strong>Note:</strong> The video tag is not supported in Internet Explorer 8 and earlier versions.</p>
+
+</div>
+{{ wtf.quick_form(form) }}
+{% endblock %}

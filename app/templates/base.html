@@ -6,6 +6,14 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
 {% endblock %}
 
 {% block navbar %}
@@ -18,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Starphases</a>
+            <a class="navbar-brand" href="/">Heeryung</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
-				<li><a href="/">Classroom</a></li>
+				<li><a href="{{ url_for('lecture.switching') }}">Classroom</a></li>
             </ul>
 			<ul class="nav navbar-nav navbar-right">
 				{% if current_user.is_authenticated %}

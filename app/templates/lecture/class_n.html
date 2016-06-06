@@ -4,11 +4,81 @@
 {% block title %}Exprmnt{% endblock %}
 
 {% block page_content %}
+<div class="page-header">
+	<h1> {{ user.username }} </h1>
+	<h1> {{ user.codename }}
+	{% if user.name or user.code %}
+	<p>
+			{% if user.name%}{{ user.name }}{% endif %}
+			{% if user.code %}{{ user.code }}
+		{% endif %}
+	</p>
+	{% endif %}
+	{% if current_user.is_administrator() %}
+	<p><a href="mailto:{{ user.email }}">{{ user.email }} </a></p>
+	<p> Member since {{ moment (user.member_since).format(
+		'L') }}.
+		Last seen {{ moment(user.last_seen).fromNow() }}
+	</p>
+</div>
+
+
+<!--vdieo -->
 <div class="page-body">
-	<video width = "320" height = "240" controls>
-		<source src="movie.mp4" type="video/mp4">
-		Your browser does not support the video tag.
-	</video>    
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player">
+		<video width = "320" height = "240" controls>
+			<script src = "https://youtu.be/wy_LFkWRjkg">
+			<script>
+   // 3. This function creates an <iframe> (and YouTube player)
+        //    after the API code downloads.
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        videoId: 'M7lc1UVf-VE',
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+	
+	// 5. The API calls this function when the player's state changes.
+	//    The function indicates that when playing a video (state=1),
+	//    the player should play for six seconds and then stop.
+	var done = false;
+	function onPlayerStateChange(event) {
+	if (event.data == YT.PlayerState.PLAYING && !done) {
+	//setTimeout(stopVideo)(X) when video all played
+	//show "next"	
+	  setTimeout(stopVideo, 6000);
+	  done = true;
+	}
+	}
+	function stopVideo() {
+	player.stopVideo();
+	}
+	</script>
+</div>
+{% endblock %}
+	
+	
+	
+
+	
+
+	//
+	// 	<source src="movie.mp4" type="video/mp4">
+	// 	Your browser does not support the video tag.
+	// </video>
 	<p><strong>Note:</strong> The video tag is not supported in Internet Explorer 8 and earlier versions.</p>
 </div>
 

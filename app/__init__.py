@@ -6,6 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
 from flask.ext.login import LoginManager
 
+
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
@@ -42,6 +43,3 @@ def create_app(config_name):
     app.register_blueprint(lecture_blueprint, url_prefix='/lecture')
     
     return app
-    
-    
-

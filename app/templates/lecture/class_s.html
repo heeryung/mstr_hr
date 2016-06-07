@@ -21,12 +21,23 @@
 	</p>
 </div>
 
-<div class=social_>
-	<script>
-		
-	</script>
-/div>
 
+<div class="social">
+	<script>
+	function changeImage() {
+	    var image = document.getElementById('socialImage');
+	    if (image.src.match("bulbon")) {
+	        image.src = "online.png";
+	    } else {
+	        image.src = "offline.png";
+	    }
+	}
+	</script>
+	
+	<img id="socialImage" onclick="changeImage()" src="online.png" width="50" height="50">
+	
+	
+</div>
 
 <!--vdieo -->
 <div class="page-body">

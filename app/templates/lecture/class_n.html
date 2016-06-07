@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 <a href="class_n.html" id="" title="class_n">class_s</a>
-{% block title %}Exprmnt{% endblock %}
+{% block title %}Class_N{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
@@ -14,9 +14,9 @@
 		{% if user.usercode %}{{ user.codename }}{% endif %}
 	</p>
 	{% endif %}
-	<!-- {% if current_user.is_administrator() %}
+	{% if current_user.is_administrator() %}
 	<p><a href="mailto:{{ user.email }}">{{ user.email }}{% endif %}
- </a></p> -->
+ </a></p>
 	<p> 
 	</p>
 </div>
@@ -61,27 +61,33 @@
 		//    The function indicates that when playing a video (state=1),
 		//    the player should play for six seconds and then stop.
 		var done = false;
-		function onPlayerStateChange(event) {
 		
+		
+		//console.log -> NO (JAVASCRIPT STOPs)
+		function onPlayerStateChange(event) {
 			if (event.data == YT.PlayerState.PLAYING && !done) {
 				//setTimeout(stopVideo)(X) when video all played
 				//show "next"	
-				setTimeout(stopVideo, 6000);
-				// console.log("Player's final state: +" + event)
+				// setTimeout(stopVideo,);
+				console.log("Player's final state: +" + event)
 				done = true;
-			
+				window.location.href = "./class_s2.html";
 			}	
 			else :
 				console.log("Player's new state: +" + event)
-			
-			
 		}
 		
-		function stopVideo(){
-			player.stopVideo();
-		}
+		// function stopVideo(){
+		// 	player.stopVideo();
+		// }
 
-
+		
+		// player.addEventListener("onStateChange", function(state){
+		//     if(state === 0){
+		//
+		//     }
+		// });
+		
 		// onYouTubeIframeAPIReady();
 		// loadVideoById({'videoId': myVideoId,
 		//                'startSeconds': 0,		               //
@@ -93,7 +99,7 @@
 	</script>
 
 	<div>
-		Steven
+
 	</div>
 	</p>			
 				   

@@ -1,0 +1,27 @@
+
+
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<a href="class_n.html" id="" title="class_n">class_s</a>
+{% block title %}Quiz{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1> {{ user.username }} </h1>
+	<h1> {{ user.codename }} </h1>
+		
+	{% if user.name or user.code %}
+	<p>
+		{% if user.username%}{{ user.username }}{% endif %}
+		{% if user.usercode %}{{ user.codename }}{% endif %}
+	</p>
+	{% endif %}
+	{% if current_user.is_administrator() %}
+	<p><a href="mailto:{{ user.email }}">{{ user.email }}{% endif %}
+ </a></p>
+</div>
+
+<div class="col-md-4">
+	{{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

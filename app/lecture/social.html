@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	
+
+	var i = 0;	
+	var images = [];
+	images[0] = "/static/offline.png"
+	images[1] = "/static/online.png"
+	var images1 = [];
+	var images2 = [];
+	var images3 = [];
+
+
+	imagesMaker1();
+	imagesMaker2();
+	imagesMaker3();
+
+
+
+	//images1[]	
+	function imagesMaker1() {
+		while (i < 200) {	
+			var randNum = Math.floor(Math.random() * 2) + 1;
+
+			if ( randNum == 2 ) {
+				images1[i] = images[0];
+			}
+			else {
+				images1[i] = images[1];
+			}
+		}
+		return images1;
+	}
+
+	//images2[]
+	function imagesMaker2() {
+		while (i < 200) {	
+			var randNum = Math.floor(Math.random() * 2) + 1;
+
+			if ( randNum == 2 ) {
+				images2[i] = images[0];
+			}
+			else {
+				images2[i] = images[1];
+			}
+		}
+		return images2;
+	}
+
+	//images3[]
+	function imagesMaker3() {
+		while (i < 200) {	
+			var randNum = Math.floor(Math.random() * 2) + 1;
+
+			if ( randNum == 2 ) {
+				images3[i] = images[0];
+			}
+			else {
+				images3[i] = images[1];
+			}
+		}
+		return images3;
+	}
+	
+	
+	var j = 0;
+
+	//fadeDivs1
+	setInterval(fadeDivs1, 30);
+	function fadeDivs1() {
+	    j = j < images1.length ? j : 0;
+	    console.log(j)
+	    $('.social1 img').fadeOut("slow", function(){
+	        $(this).attr('src', images1[j]).fadeIn("slow");
+	    })
+	    j++;
+	}
+
+	//fadeDivs3
+	setInterval(fadeDivs2, 30);
+
+	function fadeDivs2() {
+	    j = j < images2.length ? j : 0;
+	    console.log(j)
+	    $('.social2 img').fadeOut("slow", function(){
+	        $(this).attr('src', images2[j]).fadeIn("slow");
+	    })
+	    j++;
+	}
+
+	//fadeDivs3
+	setInterval(fadeDivs3, 30);
+
+	function fadeDivs3() {
+	    j = j < images3.length ? j : 0;
+	    console.log(j)
+	    $('.social3 img').fadeOut("slow", function(){
+	        $(this).attr('src', images3[j]).fadeIn("slow");
+	    })
+	    j++;
+	}
+	
+	
+});
+
+
+
+</script>
+</head>
+
+
+
+<body>
+
+
+<section id="social">
+    <article class="social1">
+        <img src="/static/offline.png" />
+	</article>
+    <article class="social2">
+        <img src="/static/offline.png" />
+	</article>
+    <article class="social3">
+        <img src="/static/offline.png" />	
+	</article>
+</section>
+
+
+
+
+
+
+
+</body>	
+</html>

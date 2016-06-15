@@ -71,30 +71,18 @@
 				// setTimeout(stopVideo,);
 				console.log("Player's final state: +" + event)
 				done = true;
-				window.location.href = "./class_s2.html";
 			}	
 			else :
 				console.log("Player's new state: +" + event)
 		}
 		
-		// function stopVideo(){
-		// 	player.stopVideo();
-		// }
-
 		
-		// player.addEventListener("onStateChange", function(state){
-		//     if(state === 0){
-		//
-		//     }
-		// });
-		
-		// onYouTubeIframeAPIReady();
-		// loadVideoById({'videoId': myVideoId,
-		//                'startSeconds': 0,		               //
-		//                // 'endSeconds': 6000,
-		//                'suggestedQuality': 'large'});
-		// player.playVideo():Void;
-		// // player.onPlayerStateChange();
+		//move to next page	
+		player.addEventListener("onStateChange", function(state){
+		    if(state === 0){
+		        render_template()
+		    }
+		});
 
 	</script>
 

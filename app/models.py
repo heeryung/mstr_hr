@@ -1,7 +1,10 @@
 from datetime import datetime
+import hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from markdown import markdown
+import bleach
+from flask import current_app, request
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
@@ -11,8 +14,12 @@ class Permission:
     GROUP_S = 0x01
     PLAY = 0x02
     QUIZ = 0X04
+    # ADMINISTRATOR = 0x08
     ADMINISTRATOR = 0x80
-    
+
+
+
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -25,7 +32,7 @@ class Role(db.Model):
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     #allowed -> 1 (administartion access )
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')
+    users = db.relationship('User', backref='role', lazy= 'dynamic')
 
     def ping(self): 
         self.last_seen = datetime.utcnow()
@@ -74,6 +81,8 @@ class User(UserMixin, db.Model):
     sex = db.Column(db.String(40), index=True)
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    # quizanswers = db.relationship('quizanswer', backref = 'author', lazy = 'dynamic')
+    # summaries = db.relationship('summary', backref = 'author', lazy = 'dynamic')
 
 
     #refresh last visit time of a user
@@ -182,3 +191,35 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+
+
+class Quizanswer(db.Model):
+    __tablename__ = 'quizanswers'
+    id = db.Column(db.Integer, primary_key=True)
+    answer = db.column(db.String(64))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
+class Summary(db.Model):
+    __tablename__ = 'summaries'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True,
+    default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    body_html = db.Column(db.Text)
+    
+    @staticmethod
+    # this function: a listender of SQLAlchemy's set event for body, which means that it will be automatically invoked whenever the body field on any instance of the class is set to a new value.
+    def on_changed_body (target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'b', 'em', 'strong', 'ul', 'p']
+        
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True))
+
+db.event.listen(Summary.body, 'set', Summary.on_changed_body)

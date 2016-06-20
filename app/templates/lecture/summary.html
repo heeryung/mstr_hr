@@ -1,33 +1,42 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}Quiz{% endblock %}
+{% import "lecture/_macros.html" as macros %}
+
+
+{% block title %}Summary{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-	<h1> Summary by {{ user.username }} </h1>
-		
-	{% if user.name or user.code %}
-	<p>
-		{% if user.username%}{{ user.username }}{% endif %}
-		{% if user.usercode %}{{ user.codename }}{% endif %}
-	</p>
-	{% endif %}
-	{% if current_user.is_administrator() %}
-	<p><a href="mailto:{{ user.email }}">{{ user.email }}{% endif %}
- </a></p>
-</div>
-	
-<!--writingForm -->
-	{% block scripts %}
-	{{ super() }}
-	{{ pagedown.include_pagedown() }}
-	{% endblock %}
-{% endblock %}
+    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 
-<div class = "summary-body">
-	{% if summary.body_html %}
-		{{ summary.body_html | safe}}
-	{% else %}
-		{{ summary.body}}
-	{% endif %}
+	<!-- used to skip the blog post form for users who do not have th permission in their role -->
+	<div>
+	    {{ wtf.quick_form(form) }}
+	</div>
+	<!-- blog post list : implemented as an HTML unordered list, with CSS classes giving it nicer formatting -->
+	<ul class = "summaries">
+		{% for summary in summaries %}
+		<li class = "summary">
+			<div class = "summary-date"> {{ moment(summary.timestamp).fromNow() }} 		</div>
+			<div class = "summary-author"> 
+				<a href = "{{ url_for ('.user', username = summary.author.username) }}">
+					{{ summary.author.username }}
+				</a> 
+			</div>
+			<div class = "summary-body"> {{ summary.body }} </div>
+		</li>
+		{% endfor %}	
+	</ul>
 </div>
+
+<div>
+	
+	
+<h3>Summary by {{ user.username }}</h3>
+{% include 'lecture/_summaries.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+</div>
+{% endif %}
+{% endblock %}

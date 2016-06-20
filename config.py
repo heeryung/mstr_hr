@@ -12,6 +12,7 @@ class Config:
     MAIL_PASSWORD = 'saucjeipaujfvdck'
     MSTR_HR_MAIL_SUBJECT_PREFIX = '[EXPRMNT]'
     MSTR_HR_MAIL_SENDER = 'MSTR_HR Admin <heeryung.c@gmail.com>'
+    MSTR_HR_SUMMARIES_PER_PAGE = 20
 
     #administrator list
     ADMINS = ['heeryung.c@gmail.com']

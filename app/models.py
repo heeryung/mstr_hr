@@ -9,40 +9,28 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
 
-# permission constant
 class Permission:
-    GROUP_S = 0x01
-    PLAY = 0x02
-    QUIZ = 0X04
+    # GROUP_S = 0x01
+    # PLAY = 0x02
+    # QUIZ = 0X04
     WRITE_ARTICLES = 0x08
     ADMINISTER = 0x80
-
-
 
 
 
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True)
-    #default should be True for only one rols and False for all the others
-    default = db.Column(db.Boolean, default = False, index = True)
-    group = db.Column(db.String(64))
-    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
-    #allowed -> 1 (administartion access )
+    name = db.Column(db.String(64), unique=True)
+    default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy= 'dynamic')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permission.GROUP_S |
-                     Permission.PLAY |
-                     Permission.QUIZ |
-                     Permission.WRITE_ARTICLES, True),
-
-            'ADMINISTER': (0xff, False)
+            'User': (Permission.WRITE_ARTICLES, True),
+            'Administrator': (0xff, False)
         }
         
         for r in roles :
@@ -55,10 +43,9 @@ class Role(db.Model):
         db.session.commit()
         
     def __repr__(self):
-        return '<Role %r>' % self.username
+        return '<Role %r>' % self.name
     
     
-
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -68,7 +55,7 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
-#additional information
+#additional information     
     code = db.Column(db.String(64), unique=True, index=True)
     age = db.Column(db.Integer, unique=True, index=True)
     sex = db.Column(db.String(40), index=True)
@@ -78,30 +65,6 @@ class User(UserMixin, db.Model):
     quizes = db.relationship('Quiz', backref = 'author', lazy = 'dynamic')
     summaries = db.relationship('Summary', backref = 'author', lazy = 'dynamic')
 
-
-    # generate fake users and blog posts
-    @staticmethod
-    def generate_fake(count=100):
-        from sqlalchemy.exc import IntegrityError
-        from random import seed
-        import forgery_py
-
-        seed()
-        for i in range(count):
-            u = User(email=forgery_py.internet.email_address(),
-                     username=forgery_py.internet.user_name(True),
-                     password=forgery_py.lorem_ipsum.word(),
-                     confirmed=True,
-                     code=forgery_py.lorem_ipsum.word(),
-                     age="106",
-                     sex="F",
-                     member_since=forgery_py.date.date(True))
-            db.session.add(u)
-            try:
-                db.session.commit()
-            except IntegrityError:
-                db.session.rollback()
-    
 
         #Group_S constructor: invoking the constructors of the base classes, and if after that the object does not have a role defined, it sets the ADMINISTER or default roles depending on the email address
     def __init__(self, **kwargs):
@@ -192,7 +155,29 @@ class User(UserMixin, db.Model):
         return '<User %r>' % self.username
 
 
+    # generate fake users and blog posts
+    @staticmethod
+    def generate_fake(count=100):
+        from sqlalchemy.exc import IntegrityError
+        from random import seed
+        import forgery_py
 
+        seed()
+        for i in range(count):
+            u = User(email=forgery_py.internet.email_address(),
+                     username=forgery_py.internet.user_name(True),
+                     password=forgery_py.lorem_ipsum.word(),
+                     confirmed=True,
+                     code=forgery_py.lorem_ipsum.word(),
+                     age="106",
+                     sex="F",
+                     member_since=forgery_py.date.date(True))
+            db.session.add(u)
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+        
             
             
 
@@ -220,19 +205,14 @@ class Quiz(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    answer_html = db.Column(db.Text)
 
 class Summary(db.Model):
     __tablename__ = 'summaries'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True,
-    default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
 
-    body_html = db.Column(db.Text)
-    
     @staticmethod
     def generate_fake(count=100):
         from random import seed, randint
@@ -243,20 +223,7 @@ class Summary(db.Model):
         for i in range(count):
             u = User.query.offset(randint(0, user_count - 1)).first()
             s = Summary(body=forgery_py.lorem_ipsum.sentences(randint(1, 5)),
-                     timestamp=forgery_py.date.date(True),
-                     author=u)
+                     timestamp=forgery_py.date.date(True), author=u)
             db.session.add(s)
             db.session.commit()
     
-    
-    
-    # @staticmethod
-    # # this function: a listender of SQLAlchemy's set event for body, which means that it will be automatically invoked whenever the body field on any instance of the class is set to a new value.
-    # def on_changed_body (target, value, oldvalue, initiator):
-    #     allowed_tags = ['a', 'b', 'em', 'strong', 'ul', 'p']
-    #
-    #     target.body_html = bleach.linkify(bleach.clean(
-    #         markdown(value, output_format='html'),
-    #         tags=allowed_tags, strip=True))#
-#
-# db.event.listen(Summary.body, 'set', Summary.on_changed_body)

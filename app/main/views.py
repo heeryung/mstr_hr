@@ -12,14 +12,23 @@ from ..decorators import admin_required
 
 
 
-
+# view function passes the form and the complete list of blog posts to the template.
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    form = NameForm()
-    if form.validate_on_submit():
+    form = SummaryForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and \
+            form.validate_on_submit():
+        summary = Summary(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(summary)
         return redirect(url_for('.index'))
-    return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False), current_time=datetime.utcnow())
     
+    # Paginate the blog post list
+    page = request.args.get('page', 1, type=int)
+    pagination = Summary.query.order_by(Summary.timestamp.desc()).paginate(page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'], error_out=False)
+    summaries = pagination.items
+    return render_template('index.html', form=form, summaries=summaries,
+                           pagination=pagination)    
         
 
 @main.route('/<username>/')
@@ -29,10 +38,13 @@ def user(username):
     # if user or code is None:
     if user is None :
         abort(404)
+        
+    summaries = user.summaries.order_by(Summary.timestamp.desc()).all()
+    return render_template('lecture/class_home.html', user=user, summaries=summaries)
+       #the list of posts for a user : obtained from the User.posts.relationship, which is a query object, so filters such as order_by() can be used in it as well
 
-    #the list of posts for a user : obtained from the User.posts.relationship, which is a query object, so filters such as order_by() can be used in it as well
+ 
 
-    return render_template('lecture/class_home.html', user=user)
     
 
 
@@ -40,108 +52,48 @@ def user(username):
 @main.route('/<username>/<filename>', methods = ['GET', 'POST'])    
 @login_required
 def userFile(username, filename) :
-    user = User.query.filter_by(username = username).first()
-    # if user or code is None:
-    if user is None :
-        abort(404)
-
-    # return render_template('lecture/summary.html', )
-    
     form = SummaryForm()
     if current_user.can(Permission.WRITE_ARTICLES) and \
             form.validate_on_submit():
         summary = Summary(body=form.body.data, author=current_user._get_current_object())
         db.session.add(summary)
-        return redirect(url_for('.summary'))
+        return redirect(url_for('.summary'))        
+                
     page = request.args.get('page', 1, type=int)
     pagination = Summary.query.order_by(Summary.timestamp.desc()).paginate(
-        page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'],
-        error_out=False)
+        page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'], error_out=False)
     summaries = pagination.items
-
-        
    
-    return render_template('lecture/' + filename, user = user, form=form, summaries=summaries,
-                           pagination=pagination)
-       
-
-def redirectHtml(username, filename):
-        return redirect(url_for(withUsername))        
+    return render_template('lecture/' + filename, user = user, form=form, summaries=summaries,pagination=pagination)
 
 
+# the route and view function that support permanent links are shown
+@main.route('/summary/<int:id>')
+def summary(id):
+    summary = Summary.query.get_or_404(id)
+    return render_template('lecture/summary.html', summary=[summary])
 
-def summary(username, filename) :
-    user = User.query.filter_by(username = username).first()
-    if user is None :
-        abort(404)
-# summary page route with blog posts
-    summaries = user.summaries.order_by(Summary.timestamp.desc()).all()
-    return render_template('lecture/summary.html', user=user, summaries=summaries)
-
-
-
-
-# summary
-# @login_required
-# def summaryIndex():
-#     form = SummaryForm()
-#     if current_user.can(Permission.WRITE_ARTICLES) and \
-#             form.validate_on_submit():
-#         summaries = Summary(body=form.body.data, author=current_user._get_current_object())
-#         db.session.add(summary)
-#         return redirect(url_for('.summary'))
-#     page = request.args.get('page', 1, type=int)
-#     pagination = Summary.query.order_by(Summary.timestamp.desc()).paginate(
-#         page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'],
-#         error_out=False)
-#     summariess = pagination.items
-#     return render_template('summary.html', form=form, summaries=summaries,
-#                            pagination=pagination)
+# # profile page route with blog posts
+# def userUser(username, filename) :
 #
-#
-#
-# def summary(username) :
-#     user = User.query.filter_by(username = username).first()
-#     if user is None :
+#     user = User.query.filter_by(username=username).first_or_404()
+#     if user is None:
 #         abort(404)
 #
-#     summaries = user.summariess.order_by(Summary.timestamp.desc()).all()
-#     return render_template('summary.html', user=user, summaries=summaries)#
-#
-# # test page route with blog posts
-#
-# @main.route('/<username>/summary', methods=['GET', 'POST'])
-# pass the form and the complete list of blog posts to the template
-# def userSummary(username):
-#     user = User.query.filter_by(username = username).first()
-#     # if user or code is None:
-#     if user is None :
-#         abort(404)
-#
-#     form = SummaryForm()
-#     if current_user.can(Permission.WRITE_ARTICLES) and \
-#             form.validate_on_submit():
-#         summary = Summary(body=form.body.data, author=current_user._get_current_object())
-#         db.session.add(summary)
-#         return redirect(url_for('.summary'))
 #     page = request.args.get('page', 1, type=int)
-#     pagination = Summary.query.order_by(Summary.timestamp.desc()).paginate(
-#         page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'],
-#         error_out=False)
+#     pagination = user.summaries.order_by(Summary.timestamp.desc()).paginate(
+#         page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'], error_out=False)
 #     summaries = pagination.items
-#     return render_template('lecture/summary.html', form=form, summaries=summaries,
+#     return render_template('summary.html', user=user, summaries=summaries,
 #                            pagination=pagination)
-#
-#
-#
-# def summary(username) :
-#     user = User.query.filter_by(username = username).first()
-#     if user is None :
-#         abort(404)
-# # summary page route with blog posts
-#     summaries = user.summaries.order_by(Summary.timestamp.desc()).all()
-#     return render_template('lecture/summary.html', user=user, summaries=summaries)
-#
+    
+
+
+
+
+
+
+
 
 
 # @main.route('/<username>/quiz', methods=['GET', 'POST'])

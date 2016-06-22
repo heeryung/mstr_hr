@@ -46,4 +46,14 @@
 	</div>
 	{% endblock %}
 
+	<div id = summaryList style = "margin:50px; padding: 50px; overflow: hidden; border: none; text-align: center;">
+		<h3>Summary by {{ user.username }}</h3>
+		{% include 'lecture/_summaries.html' %}
+		{% if pagination %}
+		<div class="pagination">
+		    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+		</div>
+	</div>
+		<!-- <h3>Summaries by {% if current_user.is_authenticated %}{{ current_user.username }}{% else %} Stranger {% endif %}</h3> -->
+{% endif %}
 {% endblock %}

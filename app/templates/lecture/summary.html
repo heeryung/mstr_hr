@@ -2,17 +2,19 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "lecture/_macros.html" as macros %}
 
-
-{% block title %}Summary{% endblock %}
-
 {% block page_content %}
 <div class="page-header">
     <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 
 	<!-- used to skip the blog post form for users who do not have th permission in their role -->
-	<div>
+	<div class="col-md-4">
+		{% if current_user.is_authenticated %}
 	    {{ wtf.quick_form(form) }}
+		{% endif %}
 	</div>
+	
+	
+	
 	<!-- blog post list : implemented as an HTML unordered list, with CSS classes giving it nicer formatting -->
 	<ul class = "summaries">
 		{% for summary in summaries %}
@@ -29,14 +31,5 @@
 	</ul>
 </div>
 
-<div>
-	
-	
-<h3>Summary by {{ user.username }}</h3>
-{% include 'lecture/_summaries.html' %}
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
-</div>
-{% endif %}
+
 {% endblock %}

@@ -1,4 +1,3 @@
-#Login Form
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo

@@ -1,3 +1,9 @@
+#-*- coding: utf-8 -*-
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
     SubmitField
@@ -17,7 +23,11 @@ class QuizForm(Form):
 
 
 class SummaryForm(Form):
-    body = TextAreaField('How can you summary what you\'ve watched?', validators = [Required()])
+    q = "오늘 시청한 강의를 다섯문장 이상으로 요약해주세요."
+    body = TextAreaField(str(q.encode('utf-8')), validators = [Required()])
     submit = SubmitField('Submit')
+    print "=================="
+    print "called-000"
+    print "=================="
     
     

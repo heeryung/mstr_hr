@@ -1,6 +1,6 @@
 #Blueprint routes and views functions
 
-from flask import render_template, redirect, request, url_for, flash
+from flask import Flask, render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from . import auth
@@ -9,6 +9,14 @@ from ..models import User
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+from flask.ext import admin, login
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib import sqla
+from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.admin import helpers, expose
+from werkzeug.security import generate_password_hash, check_password_hash
+
+    
 
  #ping methods redeem  
 @auth.before_app_request

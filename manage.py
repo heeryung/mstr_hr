@@ -3,14 +3,27 @@
 # the script begins by creating an application...
 import os
 from app import create_app, db
-from app.models import User, Role, Permission
+from app.models import User, Role, Permission, Summary, Quiz
+from flask import Flask
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext import admin, login
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib import sqla
+from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.admin import helpers, expose
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 app = create_app(os.getenv('MSTR_HR_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
+admin = Admin(app, name='mstr_hr', template_mode='bootstrap3')
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Summary, db.session))
 
+    
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role)
 manager.add_command("shell", Shell(make_context=make_shell_context))

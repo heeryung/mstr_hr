@@ -5,7 +5,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 #Quiz
-from flask.ext.wtf import Form
+from flask.ext.wtf import Form, fields, validators, Required, Email, Regexp
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
@@ -13,6 +13,39 @@ from ..models import User
 
 # 다른 library를 쓸 때는 unicode - utf-8 의 문제인데 unicode로 다른 함수를 이용해 처리를 하고 나와 utf-8
 
+
+
+class PreSurveyForm(Form) :
+    b_int = "시청하시게 될 강의는 서울대학교에서 제공하는 뇌의 기능과 구조에 대한 강의입니다. 해당 강의의 주제에 대해 평소 얼마나 \'관심\'이 있으셨습니까?"
+    b1_int = "전혀 관심이 없다"
+    b2_int = "관심이 없는 편이다"
+    b3_int = "관심이 있는 편이다"
+    b4_int = "매우 관심이 있다"
+    b_int = fields.RadioField(str(b_int.encode('utf-8')), chocies = [('1', b1_int), ('2', b2_int), ('3', b3_int), ('4', b4_int)], validators = [Required()], default = None)
+    
+    bq_know = "시청하시게 될 강의의 주제인 뇌의 기능과 구조에 대해 평소 얼마나 \'알고\' 계셨습니까?"
+    b1_know = "전혀 알지 못한다"
+    b2_know = "거의 알지 못한다"
+    b3_know = "어느 정도 알고 있다"
+    b4_know = "매우 잘 알고 있다"
+    b_know = fields.RadioField(str(bq_int.encode('utf-8')), chocies = [('1', b1_int), ('2', b2_int), ('3', b3_int), ('4', b4_int)], validators = [Required()], default = None)
+    
+    rq_int = "시청하시게 될 강의는 서울대학교에서 제공하는 기독교 개론 강의입니다. 해당 강의의 주제에 대해 평소 얼마나 \'관심\'이 있으셨습니까?"
+    r1_int = "전혀 관심이 없다"
+    r2_int = "관심이 없는 편이다"
+    r3_int = "관심이 있는 편이다"
+    r4_int = "매우 관심이 있다"
+    r_int = fields.RadioField(str(rq_int.encode('utf-8')), chocies = [('1', r1_int), ('2', r2_int), ('3', r3_int), ('4', r4_int)], validators = [Required()], default = None)
+    
+    rq_know = "시청하시게 될 강의의 주제인 뇌의 기능과 구조에 대해 평소 얼마나 \'알고\' 계셨습니까?"
+    r1_know = "전혀 알지 못한다"
+    r2_know = "거의 알지 못한다"
+    r3_know = "어느 정도 알고 있다"
+    r4_know = "매우 잘 알고 있다"
+    r_know = fields.RadioField(str(rq_int.encode('utf-8')), chocies = [('1', r1_int), ('2', r2_int), ('3', r3_int), ('4', r4_int)], validators = [Required()], default = None)
+    
+    
+    
 class QuizForm_B(Form):
     qq0 = "이하는 객관식 및 단답형 주관식 문항입니다. 답을 잘 모르시겠는 경우 임의로 답을 선택하지 마시고 '잘 모르겠다'를 골라주세요."
     qa0 = "예"
@@ -198,6 +231,50 @@ class QuizForm_R(Form):
     
     
 
+
+class PostSurveyForm(Form) 
+ #A타입이랑 B타입 나눠야함
+    q_helpful = "이 강의는 교육적인 면에서 볼 때 \'도움이 된다.'\ (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"
+    helpful = fields.RadioField(str(q_helpful.encode('utf-8')),
+        choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7')],
+        validators=[Required()], default=None)
+    
+    q_useful = "이 강의는 교육적인 면에서 볼 때 \'유용하다.\' (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"    
+    useful = fields.RadioField(str(q_useful.encode('utf-8')),
+        choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7')],
+        validators=[Required()], default=None)
+    
+    q_curious = "이 강의는 교육적인 면에서 볼 때 \'더 배우고 싶다는 호기심을 불러일으킨다.\' (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"    
+    curious = fields.RadioField(str(q_curious.encode('utf-8')),
+        choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7')],
+        validators=[Required()], default=None)
+        
+    q_satisfy = "이 강의는 \'불만족스러웠다\'. (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"
+    satisfy = fields.RadioField(str(q_satisfy.encode('utf-8')),
+        choices=[('1', '7'), ('2', '6'), ('3', '5'), ('4', '4'), ('5', '3'), ('6', '2'), ('7', '1')],
+        validators=[Required()], default=None)
+    
+    q_annoy = "이 강의는 나를 \'짜증나게\' 했다. (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"
+    annoy = fields.RadioField(str(q_annoy.encode('utf-8')),
+        choices=[('1', '7'), ('2', '6'), ('3', '5'), ('4', '4'), ('5', '3'), ('6', '2'), ('7', '1')],
+        validators=[Required()], default=None)
+    
+    q_frustrated = "이 강의는 나를 \'혼란스럽게\' 했다. (전혀 그렇지 않다:0, 보통이다:4, 매우 그렇다:7)"
+    frustrated = fields.RadioField(str(q_frustrated.encode('utf-8')),
+        choices=[('1', '7'), ('2', '6'), ('3', '5'), ('4', '4'), ('5', '3'), ('6', '2'), ('7', '1')],
+        validators=[Required()], default=None)
+    
+    q_gender = "성별을 표기해주십시오."
+    q1_gender = "남성"
+    q2_gender = "여성"
+    q3_gender = "그 외"
+    gender = fields.RadioField(q_gender,
+        choices=[('M', q1_gender), ('F', q2_gender), ('O', q3_gender)],
+        validators=[Required()], default=None)
+
+    q_age = "나이를 표기해주십시오. 만 나이로 적어주시기 바랍니다. (예: 29)"    
+    age = fields.TextField(q_age, validators=[Required()])
+    
     
     
     

@@ -14,24 +14,16 @@
     {{ wtf.quick_form(form) }}
     {% endif %}
 </div>
-<!-- <ul class = "summaries">
-	{% for summary in summaries %}
-	<li class = "summary">
-		<div class = "summary-date"> {{ moment(summary.timestamp).fromNow() }} </div>
-		<div class = "summary-author">
-			<a href = "{{ url_for('.user', username = summary.author.username )}}">
-				{{ summary.author.username}}
-			</a>
-		</div>
-		<div class = "summary-body"> {{ summary.body }} </div>
-	</li>
-	{% endfor %}
-</ul> -->
 			
-{% include 'lecture/_summaries.html' %}
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.index') }}
-</div>
-{% endif %}
+			
+			
+	{% block nextPhase %}
+	<div id = button style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
+		<br>
+		<br>
+		<a href = 'lecture/post-survey.html'><button type="button" class="nextPhase" style="float: center;"> Next </button></a>
+
+	</div>
+	{% endblock %}
+	
 {% endblock %}

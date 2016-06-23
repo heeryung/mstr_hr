@@ -3,6 +3,12 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Integ
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User
+from flask.ext import admin, login
+from flask.ext.admin.contrib import sqla
+from flask.ext.admin import helpers, expose
+from werkzeug.security import generate_password_hash, check_password_hash
+
+    
 
 class LoginForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
@@ -10,6 +16,10 @@ class LoginForm(Form):
     password = PasswordField('Password', validators=[Required()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log In')
+    
+
+    def get_user(self):
+        return db.session.query(User).filter_by(login=self.login.data).first()
 
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),

@@ -9,6 +9,12 @@ from .forms import SummaryForm, QuizForm, NameForm
 from .. import db
 from ..models import User, Permission, Role, Summary, Quiz
 from ..decorators import admin_required
+from flask.ext import admin, login
+from flask.ext.admin.contrib import sqla
+from flask.ext.admin import helpers, expose
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 
 
@@ -73,20 +79,6 @@ def summary(id):
     summary = Summary.query.get_or_404(id)
     return render_template('lecture/summary.html', summary=[summary])
 
-# # profile page route with blog posts
-# def userUser(username, filename) :
-#
-#     user = User.query.filter_by(username=username).first_or_404()
-#     if user is None:
-#         abort(404)
-#
-#     page = request.args.get('page', 1, type=int)
-#     pagination = user.summaries.order_by(Summary.timestamp.desc()).paginate(
-#         page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'], error_out=False)
-#     summaries = pagination.items
-#     return render_template('summary.html', user=user, summaries=summaries,
-#                            pagination=pagination)
-    
 
 
 

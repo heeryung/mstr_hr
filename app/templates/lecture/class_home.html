@@ -36,24 +36,17 @@
 	{% block nextPhase %} 
 	
 	<div id = button style = "margin:50px; padding: 50px; overflow: hidden; border: none; text-align: center;">
+		
+		<a href="survey/pre_survey.html"><button type="button" class="0" style = "margin:20px; padding:20px; overflow: hidden; border: none; text-align: center;"> Pre-questionnaire </button></a>
+		
 		<br>
-		<br>
-		<a href="class_s.html"><button type="button" class="1" > Next [1] </button></a>
+		
+		<a href="lecture/class_s.html"><button type="button" class="1" style = "margin:20px; padding:20px; overflow: hidden; border: none; text-align: center;"> Next [1] </button></a>
 
-		<a href = "class_n.html"><button type="button" class="2" > Next [2] </button></a>
+		<a href = "lecture/class_n.html"><button type="button" class="2" style = "margin:20px; padding: 20px; overflow: hidden; border: none; text-align: center;"> Next [2] </button></a>
 		
 
 	</div>
 	{% endblock %}
 
-	<div id = summaryList style = "margin:50px; padding: 50px; overflow: hidden; border: none; text-align: center;">
-		<h3>Summary by {{ user.username }}</h3>
-		{% include 'lecture/_summaries.html' %}
-		{% if pagination %}
-		<div class="pagination">
-		    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
-		</div>
-	</div>
-		<!-- <h3>Summaries by {% if current_user.is_authenticated %}{{ current_user.username }}{% else %} Stranger {% endif %}</h3> -->
-{% endif %}
 {% endblock %}

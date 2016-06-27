@@ -1,0 +1,47 @@
+{% from "survey/macro.html" import render_field %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block content%}
+	<div class="col-lg-12 well" >
+		
+		{% block page_survey_A_header %}
+	 	 <div class="page-header" style = "margin:10px; padding: 10px; overflow: hidden; border: none;">
+		    <!-- <form method="POST" action="/survey/post_survey_a" class="form form-horizontal" > -->
+		    <h2> 시청하신 B타입 강의 영상에 대한 설문지</h2>
+		
+			<p style = "margin:10px; padding: 10px; overflow: hidden; border: none;"> 앞 페이지에 이어 본 설문지는 시청하신 강의 영상에 대한 인상을 묻는 것을 목적으로 합니다. 이 페이지에서는 다른 사람의 동영상 시청 패턴을 알 수 있었던 B 타입 에 대한 인상을 질문드릴 것입니다. 아래 정서를 표현하는 단어가 귀하의 B 타입 강의 시청 경험과 부합되는 정도를 체크해주시기 바랍니다.
+		  	</p>
+  
+	  	</div>
+		{% endblock %}	
+
+		
+		{% block page_survey %}	
+		<div class="col-lg-10"  style = "margin:30px; padding: 30px; overflow: hidden; border: none;">
+			<form method=post action="/survey/post_survey_b" class="form form-horizontal">
+			{{ form.csrf_token }}
+
+			{{ render_field(form.helpful_b) }}
+			{{ render_field(form.useful_b) }}
+			{{ render_field(form.curious_b) }}
+			{{ render_field(form.satisfy_b) }}
+			{{ render_field(form.annoy_b) }}
+			{{ render_field(form.frustrated_b) }}
+			{{ render_field(form.gender) }}
+			{{ render_field(form.age, class="form-control") }}
+
+  			<p><input type=submit value=Save>  
+			
+				{% block nextPhase %}
+				<div id = button class = "col-md-12" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
+					<br>
+					<br>
+					<a href="/survey/finish_survey"><button type="button" class="nextPhase" > Next </button></a>
+				</div>
+				{% endblock %}
+			
+			</form>
+		</div>		
+
+		{% endblock %}

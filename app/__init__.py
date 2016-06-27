@@ -45,5 +45,9 @@ def create_app(config_name):
     
     from .lecture import lecture as lecture_blueprint
     app.register_blueprint(lecture_blueprint, url_prefix='/lecture')
+
+    from .survey import survey as survey_blueprint
+    app.register_blueprint(survey_blueprint, url_prefix='/survey')
+    
     
     return app

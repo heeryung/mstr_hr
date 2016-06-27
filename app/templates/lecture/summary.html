@@ -3,33 +3,35 @@
 {% import "lecture/_macros.html" as macros %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
-
-	<!-- used to skip the blog post form for users who do not have th permission in their role -->
-	<div class="col-md-4">
-		{% if current_user.is_authenticated %}
-	    {{ wtf.quick_form(form) }}
-		{% endif %}
+	{% block page_summary_define%}
+	<div class="page-header">
+	    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 	</div>
+	{% endblock %}
 	
 	
 	
-	<!-- blog post list : implemented as an HTML unordered list, with CSS classes giving it nicer formatting -->
-	<ul class = "summaries">
-		{% for summary in summaries %}
-		<li class = "summary">
-			<div class = "summary-date"> {{ moment(summary.timestamp).fromNow() }} 		</div>
-			<div class = "summary-author"> 
-				<a href = "{{ url_for ('.user', username = summary.author.username) }}">
-					{{ summary.author.username }}
-				</a> 
-			</div>
-			<div class = "summary-body"> {{ summary.body }} </div>
-		</li>
-		{% endfor %}	
-	</ul>
-</div>
+	<div class="page-body">	
+	{% block page_summary %}	
+		<!-- used to skip the blog post form for users who do not have th permission in their role -->
+		<div class="col-md-12">
+			{% if current_user.is_authenticated %}
+		    {{ wtf.quick_form(form) }}
+			{% endif %}
+		</div>
+		
+	{% endblock %}
+				
+	{% block nextPhase %}
+	<div>
 
+	</div>	
+	<div id = button class = "col-md-12" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
+		<br>
+		<br>
+		<a href = '/survey/post_survey_a'><button type="button" class="nextPhase" style="float: center;"> Next </button></a>
 
+	</div>
+	{% endblock %}
+	
 {% endblock %}

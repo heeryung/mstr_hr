@@ -16,12 +16,12 @@ from ..models import User
 
 
 class PreSurveyForm(Form) :
-    b_int = "시청하시게 될 강의는 서울대학교에서 제공하는 뇌의 기능과 구조에 대한 강의입니다. 해당 강의의 주제에 대해 평소 얼마나 \'관심\'이 있으셨습니까?"
+    bq_int = "시청하시게 될 강의는 서울대학교에서 제공하는 뇌의 기능과 구조에 대한 강의입니다. 해당 강의의 주제에 대해 평소 얼마나 \'관심\'이 있으셨습니까?"
     b1_int = "전혀 관심이 없다"
     b2_int = "관심이 없는 편이다"
     b3_int = "관심이 있는 편이다"
     b4_int = "매우 관심이 있다"
-    b_int = fields.RadioField(str(b_int.encode('utf-8')), chocies = [('1', b1_int), ('2', b2_int), ('3', b3_int), ('4', b4_int)], validators = [Required()], default = None)
+    b_int = fields.RadioField(str(bq_int.encode('utf-8')), chocies = [('1', b1_int), ('2', b2_int), ('3', b3_int), ('4', b4_int)], validators = [Required()], default = None)
     
     bq_know = "시청하시게 될 강의의 주제인 뇌의 기능과 구조에 대해 평소 얼마나 \'알고\' 계셨습니까?"
     b1_know = "전혀 알지 못한다"

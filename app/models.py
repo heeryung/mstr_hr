@@ -65,15 +65,23 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default=False)
 #additional information     
     code = db.Column(db.String(64), unique=True, index=True)
-    age = db.Column(db.Integer, unique=True, index=True)
+    age = db.Column(db.Integer,  index=True)
     sex = db.Column(db.String(40), index=True)
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+#Survey (...?)
+    # s_pre = db.Column(db.Boolean)
+    # s_post = db.Column(db.Boolean)
+    # s_brain = db.Column(db.Boolean)
+    # s_religion = db.Column(db.Boolean)
 #relationship
-    quizes = db.relationship('Quiz', backref = 'author', lazy = 'dynamic')
     summaries = db.relationship('Summary', backref = 'author', lazy = 'dynamic')
-
-
+    # religionSurveys = db.relationship('ReligionSurvey', backref = 'author', lazy = 'dynamic')
+    # brainSurveys = db.relationship('BrainSurvey', backref = 'author', lazy = 'dynamic')
+    # preSurveys = db.relationship('PreSurvey', backref = 'author', lazy = 'dynamic')
+    # postSurveys_a = db.relationship('PostSurvey_A', backref = 'author', lazy = 'dynamic')
+    # postSurveys_b = db.relationship('PostSurvey_B', backref = 'author', lazy = 'dynamic')
+    #
         #Group_S constructor: invoking the constructors of the base classes, and if after that the object does not have a role defined, it sets the ADMINISTER or default roles depending on the email address
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -174,29 +182,7 @@ class User(UserMixin, db.Model):
         return '<User %r>' % self.username
 
 
-    # generate fake users and blog posts
-    @staticmethod
-    def generate_fake(count=100):
-        from sqlalchemy.exc import IntegrityError
-        from random import seed
-        import forgery_py
 
-        seed()
-        for i in range(count):
-            u = User(email=forgery_py.internet.email_address(),
-                     username=forgery_py.internet.user_name(True),
-                     password=forgery_py.lorem_ipsum.word(),
-                     confirmed=True,
-                     code=forgery_py.lorem_ipsum.word(),
-                     age="106",
-                     sex="F",
-                     member_since=forgery_py.date.date(True))
-            db.session.add(u)
-            try:
-                db.session.commit()
-            except IntegrityError:
-                db.session.rollback()
-        
             
             
 
@@ -276,14 +262,92 @@ class MyAdminIndexView(admin.AdminIndexView):
 
 
 
-
-class Quiz(db.Model):
-    __tablename__ = 'quizes'
+class PreSurvey(db.Model):
+    __tablename__ = 'preSurveys'
     id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.String(64))
+    bq_int = db.Column(db.String(20))
+    bq_know = db.Column(db.String(20)) 
+    rq_int = db.Column(db.String(20))
+    rq_know = db.Column(db.String(20)) 
     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', uselist=False, backref='PreSurvey')
+    
 
+
+class PostSurvey_A(db.Model):
+    __tablename__ = 'postSurveys_a'
+    id = db.Column(db.Integer, primary_key=True)
+    helpful_a = db.Column(db.String(20))
+    useful_a = db.Column(db.String(20))
+    curious_a = db.Column(db.String(20))    
+    satisfy_a = db.Column(db.String(20))    
+    annoy_a = db.Column(db.String(20))    
+    frustrated_a = db.Column(db.String(20))    
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', uselist=False, backref='PostSurvey_A')
+
+
+    def __init__(self, helpful_a=None, useful_a=None, curious_a=None, satisfy_a=None, annoy_a=None, frustrated_a=None):
+        self.helpful_a = helpful_a
+        self.useful_a = useful_a
+        self.curious_a = curious_a
+        self.satisfy_a = satisfy_a
+        self.annoy_a = annoy_a
+        self.frustrated_a = frustrated_a
+
+
+
+
+
+class PostSurvey_B(db.Model):
+    __tablename__ = 'postSurveys_b'
+    id = db.Column(db.Integer, primary_key=True)
+    helpful_b = db.Column(db.String(20))
+    useful_b = db.Column(db.String(20))
+    curious_b = db.Column(db.String(20))    
+    satisfy_b = db.Column(db.String(20))    
+    annoy_b = db.Column(db.String(20))    
+    frustrated_b = db.Column(db.String(20))    
+    gender = db.Column(db.String(20))    
+    age = db.Column(db.String(20))    
+        
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', uselist=False, backref='PostSurvey_B')
+
+
+    def __init__(self, helpful_b=None, useful_b=None, curious_b=None, satisfy_b=None, annoy_b=None, frustrated_b=None, gender=None, age=None):
+        self.helpful_b = helpful_b
+        self.useful_b = useful_b
+        self.curious_b = curious_b
+        self.satisfy_b = satisfy_b
+        self.annoy_b = annoy_b
+        self.frustrated_b = frustrated_b
+        self.gender = gender 
+        self.age = age
+    
+    
+
+class BrainSurvey(db.Model):
+    __tablename__ = 'brainSurveys'
+    id = db.Column(db.Integer, primary_key=True)
+    answer = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', uselist=False, backref='BrainSurvey')    
+
+
+class ReligionSurvey(db.Model):
+    __tablename__ = 'religionSurveys'
+    id = db.Column(db.Integer, primary_key=True)
+    answer = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', uselist=False, backref='ReligionSurvey')
+    
+    
 
 class Summary(db.Model):
     __tablename__ = 'summaries'
@@ -291,18 +355,6 @@ class Summary(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
 
-    @staticmethod
-    def generate_fake(count=100):
-        from random import seed, randint
-        import forgery_py
-
-        seed()
-        user_count = User.query.count()
-        for i in range(count):
-            u = User.query.offset(randint(0, user_count - 1)).first()
-            s = Summary(body=forgery_py.lorem_ipsum.sentences(randint(1, 5)),
-                     timestamp=forgery_py.date.date(True), author=u)
-            db.session.add(s)
-            db.session.commit()
 

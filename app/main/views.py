@@ -1,18 +1,20 @@
 #the routes of the application updated to be in the blueprint
 #imports blueprint and defines the routes associated with authentication using its route decorator
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, request, current_app, abort, flash
+from flask import render_template, session, redirect, url_for, request, current_app, abort, flash, g
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user, abort
 from . import main
-from .forms import SummaryForm, QuizForm, NameForm
+from .forms import SummaryForm, NameForm, PreSurveyForm, BrainForm, ReligionForm, PostSurvey_AForm, PostSurvey_BForm
 from .. import db
-from ..models import User, Permission, Role, Summary, Quiz
+from ..models import User, Permission, Role, Summary, PreSurvey, PostSurvey_A, PostSurvey_B, BrainSurvey, ReligionSurvey
 from ..decorators import admin_required
 from flask.ext import admin, login
 from flask.ext.admin.contrib import sqla
 from flask.ext.admin import helpers, expose
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 
 
@@ -51,11 +53,10 @@ def user(username):
 
  
 
-    
+        
+            
 
-
-
-@main.route('/<username>/<filename>', methods = ['GET', 'POST'])    
+@main.route('/<username>/lecture/<filename>', methods = ['GET', 'POST'])    
 @login_required
 def userFile(username, filename) :
     form = SummaryForm()
@@ -63,14 +64,64 @@ def userFile(username, filename) :
             form.validate_on_submit():
         summary = Summary(body=form.body.data, author=current_user._get_current_object())
         db.session.add(summary)
-        return redirect(url_for('.summary'))        
+        # return redirect(url_for('.index'))
                 
     page = request.args.get('page', 1, type=int)
     pagination = Summary.query.order_by(Summary.timestamp.desc()).paginate(
         page, per_page=current_app.config['MSTR_HR_SUMMARIES_PER_PAGE'], error_out=False)
     summaries = pagination.items
    
-    return render_template('lecture/' + filename, user = user, form=form, summaries=summaries,pagination=pagination)
+    return render_template('lecture/' + filename, user = user, form=form, summaries=summaries, pagination=pagination)
+
+
+@main.route('/<username>/survey/pre_survey.html', methods = ['GET', 'POST']) 
+@login_required
+def preSurvey(username):
+   
+    form = PreSurveyForm(request.form)
+    
+    if current_user.can(Permission.WRITE_ARTICLES) and \
+            form.validate_on_submit():
+        preSurvey = PreSurvey(author=current_user._get_current_object())
+        form.populate_obj(preSurvey)
+        db.session.add(preSurvey)
+        db.session.commit()
+    
+    return render_template('survey/preSurvey.html', title='Pre_Survey', form=form)
+    
+
+@main.route('/survey/post_survey_a', methods = ['GET', 'POST'])
+@login_required
+def postSurvey_A():
+    form = PostSurvey_AForm(request.form)
+    
+    if request.method == 'POST' and form.validate_on_submit():
+        postSurvey_a = PostSurvey_A(author=current_user._get_current_object())
+        form.populate_obj(postSurvey_a)
+        db.session.add(postSurvey_a)
+        db.session.commit()
+
+    return render_template('survey/postSurvey_a.html', title='Survey A', form=form)
+# else:
+#     return redirect(url_for('/post_survey', user = user, form = form))
+
+@main.route('/survey/post_survey_b', methods = ['GET', 'POST'])
+@login_required
+def postSurvey_B():
+    form = PostSurvey_BForm(request.form)
+    
+    if current_user.can(Permission.WRITE_ARTICLES) and \
+            form.validate_on_submit():
+        postSurvey_b = PostSurvey_B(author=current_user._get_current_object(author=current_user._get_current_object()))
+        form.populate_obj(postSurvey_b)
+        db.session.add(postSurvey_b)
+        db.session.commit()
+
+    return render_template('survey/postSurvey_b.html', title='Survey B', form=form)
+    
+        
+
+
 
 
 # the route and view function that support permanent links are shown
@@ -80,14 +131,4 @@ def summary(id):
     return render_template('lecture/summary.html', summary=[summary])
 
 
-
-
-
-
-
-
-
-
-# @main.route('/<username>/quiz', methods=['GET', 'POST'])
-# @login_required
 

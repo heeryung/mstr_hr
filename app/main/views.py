@@ -60,9 +60,9 @@ def user(username):
 @login_required
 def userFile(username, filename) :
     form = SummaryForm()
-    if current_user.can(Permission.WRITE_ARTICLES) and \
-            form.validate_on_submit():
-        summary = Summary(body=form.body.data, author=current_user._get_current_object())
+    if request.method == 'POST' and form.validate_on_submit():
+        # summary = Summary(body=form.body.data, author=current_user._get_current_object())
+        summary = Summary(body=form.body.data)
         db.session.add(summary)
         # return redirect(url_for('.index'))
                 

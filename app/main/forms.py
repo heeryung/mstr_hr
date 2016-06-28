@@ -18,7 +18,7 @@ class NameForm(Form):
 
 
 class SummaryForm(Form):
-    q = "오늘 시청한 강의를 다섯문장 이상으로 요약해주세요. &#13;&#10; 작성 후 반드시 아래의 \"Save\" 버튼을 눌러 글을 저장하신 후에 \"Next\"를 눌러주세요."
+    q = "오늘 시청한 강의를 다섯문장 이상으로 요약해주세요. 작성 후 반드시 아래의 \"Save\" 버튼을 눌러 글을 저장하신 후에 \"Next\"를 눌러주세요."
     body = TextAreaField(str(q.encode('utf-8')), validators = [Required()])
     submit = SubmitField('Save')
     
@@ -30,7 +30,7 @@ class PreSurveyForm(Form) :
     r2_int = "관심이 없는 편이다"
     r3_int = "관심이 있는 편이다"
     r4_int = "매우 관심이 있다"
-    r_int = RadioField(str(rq_int.encode('utf-8')), choices = [('1', r1_int), ('2', r2_int), ('3', r3_int), ('4', r4_int)], validators = [Required()])
+    r_int = RadioField(str(rq_int.encode('utf-8')), choices = [("1", r1_int), ("2", r2_int), ("3", r3_int), ("4", r4_int)], validators = [Required()])
     
     rq_know = "시청하시게 될 강의의 주제인 기독교 개론에 대해 평소 얼마나 \'알고\' 계셨습니까?"
     r1_know = "전혀 알지 못한다"
@@ -119,7 +119,7 @@ class PreSurveyForm(Form) :
     
 
 class ReligionForm(Form):
-    rqq0 = "이하는 객관식 및 단답형 주관식 문항입니다. 답을 잘 모르시겠는 경우 임의로 답을 선택하지 마시고 '잘 모르겠다'를 골라주세요."
+    rqq0 = "이하는 객관식 및 단답형 주관식 문항입니다. 잘 모르시겠는 경우 임의로 답을 선택하지 마시고 '잘 모르겠다'를 골라주세요."
     rqa0 = "예"
     rq0 = RadioField(str(rqq0.encode('utf-8')), choices=[("Y", rqa0)], validators = [Required()])
 

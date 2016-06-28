@@ -3,7 +3,7 @@
 # the script begins by creating an application...
 import os
 from app import create_app, db
-from app.models import User, Role, Permission, Summary, PostSurvey_A, PostSurvey_B, BrainSurvey, ReligionSurvey, PreSurvey
+from app.models import User, Role, Permission, Summary, PostSurvey_A, PostSurvey_B, ReligionSurvey, PreSurvey
 from flask import Flask
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -25,7 +25,6 @@ admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Summary, db.session))
 admin.add_view(ModelView(PreSurvey, db.session))
 admin.add_view(ModelView(ReligionSurvey, db.session))
-admin.add_view(ModelView(BrainSurvey, db.session))
 admin.add_view(ModelView(PostSurvey_A, db.session))
 admin.add_view(ModelView(PostSurvey_B, db.session))
 

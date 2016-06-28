@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% from "survey/macro.html" import render_field %}
+
+
+{% block content%}
+	<div class="col-lg-12 well" >
+		
+		{% block page_survey_R_header %}
+	 	 <div class="page-header" style = "margin:10px; padding: 10px;  border: none;">
+			<!-- <form method="POST" action="/survey/post_survey_a" class="form form-horizontal" > -->
+		    <h2> 시청하신 강의 영상에 대한 평가문항 </h2>
+		
+			<p style = "margin:10px; padding: 10px;  border: none;">  
+			 <ul>
+				 <li> 모든 질문은 본래 가지고 계시던 배경지식이 아닌 시청하셨던 강의 내용에 기반하여 답해주시기 바랍니다. </li>
+				 <li> 본 문항을 완료하시는데 걸리는 예상 시간은 10~15분입니다.</li>
+				 <li> 실험 결과 처리 상의 문제가 있사오니 back/뒤로 버튼을 클릭하지 마시고 진행해주시기 바랍니다.
+				 </li>
+		  	</p>
+  
+	  	</div>
+		{% endblock %}	
+
+		
+		{% block page_survey_R %}	
+		<div class="col-lg-6"  style = " padding: 30px; text-align: left;
+    border: none; overfloat: hidden;" >
+			<form method=post action='/survey/religion_survey' class="form form-horizontal">
+			{{ form.csrf_token }}
+			
+			{{ render_field(form.rq0) }}
+			<br>
+			<br>
+			<br>
+			{{ render_field(form.rq1) }}
+			<br>
+			<br>
+			
+			{{ render_field(form.rq2) }}
+			<p>[  (a)는(은) 로마 제국에서 사면을 할 때 주는 편지에서 지칭하는 말에서 유래되었다. (a)에 대한 믿음 없이는 구원도 없다는 점 때문에 (a)(이)라는 명칭으로 신약성서에 언급되었다.  ] </p><br>
+			<br>
+			<br>
+						
+			{{ render_field(form.rq3) }}
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq4) }}
+			<br>
+			<br>
+			
+			{{ render_field(form.rq5) }}
+			<br>
+			<br>
+			
+			{{ render_field(form.rq6) }}
+			<br>
+			<br>
+			
+			{{ render_field(form.rq7) }} 
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq8) }} 
+			<p> [   또 하루는 하느님의 아들들이 와서 하나님 앞에 서고 사탄도 그들 가운데에 와서 하나님 앞에 서니 하나님께서 사탄에게 이르시되 네가 어디에서 왔느냐 사탄이 하나님께 대답하여 이르되 땅을 두루 돌아 여기저기 다녀왔나이다 (중략) 하나님께서 사탄에게 이르시되 네가 욥을 주의하여 보았느냐 (중략) 사탄이 이에 하나님 앞에서 물러가며 욥을 쳐서 그의 발바닥에서 정수리까지 종기가 나게 한지라   ] </p>
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq9) }} 
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq10) }} 
+			<p> [   이 인물은 뛰어난 랍비이자 그리스 교육의 핵심지 출신이며, 신약성서 중 가장 먼저 쓰인 성서의 저자이다. 그리스 로마 철학과 종교에 심취해있었으며, 그러한 지식을 바탕으로 그리스도교를 당시 세계에 확장하는데 큰 역할을 했다   ] </p>
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq11) }}<br> 
+			<br>
+			<br>
+			
+			
+			 <img src = "{{ url_for('static', filename = 'religion_.png') }}" width="250" height="200"> <br>
+			{{ render_field(form.rq12) }}
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq13) }}
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq14) }} 
+			<br>
+			<br>
+			
+			
+			{{ render_field(form.rq15) }}
+			<p> [   강의에 따르면 (a)는(은) 왕 또는 신의 뜻이 펼쳐지는 상태를 말한다.   ] </p>
+			<br>
+			
+	
+
+  			<p><input type=submit value=Save> <p/> 
+			
+				{% block nextPhase %}
+				<div id = button class = "col-md-12" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
+					<br>
+					<br>
+					<a href="/survey/post_survey_a"><button type="button" class="nextPhase" > Next </button></a>
+				</div>
+				{% endblock %}
+			
+			</form>
+		</div>		
+
+		{% endblock %}
+		
+		
+
+
+	</div>
+
+
+{% endblock %}

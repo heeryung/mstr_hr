@@ -5,7 +5,7 @@ from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 # from . import lecture
 from .. import db
-from ..models import User, Permission, Role, Summary, PostSurvey_A, PostSurvey_B, PreSurvey, BrainSurvey, ReligionSurvey
+from ..models import User, Permission, Role, Summary, PostSurvey_A, PostSurvey_B, PreSurvey, ReligionSurvey
 from sqlalchemy.orm import load_only
 from flask import g
 # from .forms import PreSurveyForm, BrainForm, ReligionForm, PostSurvey_AForm, PostSurvey_BForm

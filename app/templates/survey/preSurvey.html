@@ -2,12 +2,13 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "survey/macro.html" import render_field %}
 
+
 {% block content%}
 	<div class="col-lg-12 well" >
 		
 		{% block page_survey_A_header %}
 	 	 <div class="page-header" style = "margin:10px; padding: 10px; overflow: hidden; border: none;">
-		    <!-- <form method="POST" action="/survey/post_survey_a" class="form form-horizontal" > -->
+			 <!-- <form method="POST" action="/survey/post_survey_a" class="form form-horizontal" > -->
 		    <h2> 시청 전 설문지</h2>
 		
 			<p style = "margin:10px; padding: 10px; overflow: hidden; border: none;"> 본 설문지는 시청하신 강의 영상에 대한 기본 지식 및 관심도를 묻기 위함입니다. 
@@ -19,15 +20,13 @@
 		
 		{% block page_survey %}	
 		<div class="col-lg-10"  style = "margin:30px; padding: 30px; overflow: hidden; border: none;">
-			<form method=post action="/survey/post_survey_a" class="form form-horizontal">
+			<form method=post action="/survey/pre_survey.html" class="form form-horizontal">
 			{{ form.csrf_token }}
 
-			{{ render_field(form.b_int) }}
-			{{ render_field(form.b_know) }}
 			{{ render_field(form.r_int) }}
 			{{ render_field(form.r_know) }}
 
-  			<p><input type=submit value=Save>  
+  			<p><input type=submit value=Save></p>
 			
 				{% block nextPhase %}
 				<div id = button class = "col-md-12" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
@@ -36,16 +35,9 @@
 					<a href="{{ url_for('main.user', username = current_user.username) }}"><button type="button" class="nextPhase" > Next </button></a>
 				</div>
 				{% endblock %}
-			
+				
 			</form>
 		</div>		
-
 		{% endblock %}
-		
-		
-
-
 	</div>
-
-
 {% endblock %}

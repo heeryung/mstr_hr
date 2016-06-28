@@ -5,9 +5,9 @@ from flask import render_template, session, redirect, url_for, request, current_
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user, abort
 from . import main
-from .forms import SummaryForm, NameForm, PreSurveyForm, BrainForm, ReligionForm, PostSurvey_AForm, PostSurvey_BForm
+from .forms import SummaryForm, NameForm, PreSurveyForm, ReligionForm, PostSurvey_AForm, PostSurvey_BForm
 from .. import db
-from ..models import User, Permission, Role, Summary, PreSurvey, PostSurvey_A, PostSurvey_B, BrainSurvey, ReligionSurvey
+from ..models import User, Permission, Role, Summary, PreSurvey, PostSurvey_A, PostSurvey_B, ReligionSurvey
 from ..decorators import admin_required
 from flask.ext import admin, login
 from flask.ext.admin.contrib import sqla
@@ -74,20 +74,23 @@ def userFile(username, filename) :
     return render_template('lecture/' + filename, user = user, form=form, summaries=summaries, pagination=pagination)
 
 
-@main.route('/<username>/survey/pre_survey.html', methods = ['GET', 'POST']) 
+
+
+@main.route('/survey/pre_survey.html', methods = ['GET', 'POST']) 
 @login_required
-def preSurvey(username):
-   
+def preSurvey():
     form = PreSurveyForm(request.form)
     
-    if current_user.can(Permission.WRITE_ARTICLES) and \
-            form.validate_on_submit():
-        preSurvey = PreSurvey(author=current_user._get_current_object())
+    if request.method == 'POST' and form.validate_on_submit():
+        preSurvey = PreSurvey()
         form.populate_obj(preSurvey)
         db.session.add(preSurvey)
         db.session.commit()
     
     return render_template('survey/preSurvey.html', title='Pre_Survey', form=form)
+
+
+
     
 
 @main.route('/survey/post_survey_a', methods = ['GET', 'POST'])
@@ -96,7 +99,7 @@ def postSurvey_A():
     form = PostSurvey_AForm(request.form)
     
     if request.method == 'POST' and form.validate_on_submit():
-        postSurvey_a = PostSurvey_A(author=current_user._get_current_object())
+        postSurvey_a = PostSurvey_A()
         form.populate_obj(postSurvey_a)
         db.session.add(postSurvey_a)
         db.session.commit()
@@ -110,18 +113,34 @@ def postSurvey_A():
 def postSurvey_B():
     form = PostSurvey_BForm(request.form)
     
-    if current_user.can(Permission.WRITE_ARTICLES) and \
-            form.validate_on_submit():
-        postSurvey_b = PostSurvey_B(author=current_user._get_current_object(author=current_user._get_current_object()))
+    if request.method == 'POST' and form.validate_on_submit():
+        postSurvey_b = PostSurvey_B()
         form.populate_obj(postSurvey_b)
         db.session.add(postSurvey_b)
         db.session.commit()
 
     return render_template('survey/postSurvey_b.html', title='Survey B', form=form)
     
-        
+
+@main.route('/survey/religion_survey', methods = ['GET', 'POST'])
+@login_required
+def religionSurvey():
+    form = ReligionForm(request.form)
+    
+    if request.method == 'POST' and form.validate_on_submit():
+        religionSurvey = ReligionSurvey()
+        form.populate_obj(religionSurvey)
+        db.session.add(religionSurvey)
+        db.session.commit()
+
+    return render_template('survey/religionSurvey.html', title='ReligionSurvey', form=form)
 
 
+@main.route('/survey/survey_final.html')
+@login_required
+def finalSurvey():
+    return render_template('survey/survey_final.html', title='Survey fin')
+    
 
 
 # the route and view function that support permanent links are shown

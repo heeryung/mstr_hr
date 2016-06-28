@@ -1,9 +1,5 @@
-#-*- coding: utf-8 -*-
-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
+{% from "survey/macro.html" import render_field %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
 
 {% block content %}
@@ -12,13 +8,10 @@ sys.setdefaultencoding('utf-8')
   <div class="col-lg-12 well text-center">
   <h2> 모든 실험 과정이 종료되었습니다. </h2>
 
-  <h3>You have now completed all the steps and are entered into our drawing.</h3>
+  <h2>You have now completed all the steps and are entered into our drawing.</h2>
 
   <p>
-	  
-    You will need your password to check if you have won the prize. <br>
-    Further instructions will be provided via email.<br>
-    Best of luck!
+	실험 담당자를 불러주세요.
   </p>
 
   </div>

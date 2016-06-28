@@ -8,7 +8,11 @@ jQuery(document).ready(function($){
 	var i = 0;	
 	var images = [];
 	images[0] = "/static/offline.png"
-	images[1] = "/static/online.png"
+	images[1] = "/static/online_1.jpg"
+	images[2] = "/static/online_2.jpg"
+	images[4] = "/static/online_3.jpg"
+	images[5] = "/static/online_4.jpg"
+	
 	
 	
 	var images1 = [];
@@ -46,7 +50,7 @@ jQuery(document).ready(function($){
 				images2[i] = images[0];
 			}
 			else {
-				images2[i] = images[1];
+				images2[i] = images[2];
 			}
 			i ++;
 		}
@@ -64,7 +68,7 @@ jQuery(document).ready(function($){
 				images3[i] = images[0];
 			}
 			else {
-				images3[i] = images[1];
+				images3[i] = images[3];
 			}
 			i ++;
 		}
@@ -83,7 +87,7 @@ jQuery(document).ready(function($){
 				images4[i] = images[0];
 			}
 			else {
-				images4[i] = images[1];
+				images4[i] = images[4];
 			}
 			i ++;
 		}
@@ -101,7 +105,7 @@ jQuery(document).ready(function($){
 				images5[i] = images[0];
 			}
 			else {
-				images5[i] = images[1];
+				images5[i] = images[5];
 			}
 			i ++;
 		}
@@ -163,7 +167,7 @@ jQuery(document).ready(function($){
 	}
 	
 	//fadeDivs4
-	setInterval(fadeDivs4, 100000);
+	setInterval(fadeDivs4, 3000);
 
 	function fadeDivs4() {
 	    j = j < images4.length ? j : 0;
@@ -177,7 +181,7 @@ jQuery(document).ready(function($){
 	
 	
 	//fadedivs5
-	setInterval(fadeDivs5, 25000);
+	setInterval(fadeDivs5, 10000);
 
 	function fadeDivs5() {
 	    j = j < images5.length ? j : 0;
@@ -207,19 +211,19 @@ jQuery(document).ready(function($){
 
 <div id="social">
     <article class="social1">
-        <img src="/static/online.png" height="42" width="42" />
+        <img src="/static/online_1.jpg" height="42" width="42" />
 	</article>
     <article class="social2">
-        <img src="/static/online.png" height="42" width="42" />
+        <img src="/static/online_2.jpg" height="42" width="42" />
 	</article>
     <article class="social3">
-        <img src="/static/online.png" height="42" width="42" />	
+        <img src="/static/online_3.jpg" height="42" width="42" />	
 	</article>
     <article class="social4">
-        <img src="/static/online.png" height="42" width="42" />	
+        <img src="/static/online_4.jpg" height="42" width="42" />	
 	</article>
     <article class="social5">
-        <img src="/static/online.png" height="42" width="42" />	
+        <img src="/static/online_5.jpg" height="42" width="42" />	
 	</article>
 
 </div>

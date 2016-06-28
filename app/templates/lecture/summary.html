@@ -13,7 +13,7 @@
 	
 	<div class="page-body">	
 	{% block page_summary %}	
-		<!-- used to skip the blog post form for users who do not have th permission in their role -->
+
 		<div class="col-md-12">
 			{% if current_user.is_authenticated %}
 		    {{ wtf.quick_form(form) }}
@@ -29,7 +29,7 @@
 	<div id = button class = "col-md-12" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
 		<br>
 		<br>
-		<a href = '/survey/post_survey_a'><button type="button" class="nextPhase" style="float: center;"> Next </button></a>
+		<a href = '/survey/religion_survey'><button type="button" class="nextPhase" style="float: center;"> Next </button></a>
 
 	</div>
 	{% endblock %}

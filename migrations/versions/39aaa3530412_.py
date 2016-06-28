@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: 132f9830e1e4
+Revision ID: 39aaa3530412
 Revises: None
-Create Date: 2016-06-25 00:39:55.033597
+Create Date: 2016-06-28 17:40:02.015850
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '132f9830e1e4'
+revision = '39aaa3530412'
 down_revision = None
 
 from alembic import op
@@ -40,20 +40,48 @@ def upgrade():
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('ix_users_age', 'users', ['age'], unique=True)
+    op.create_index('ix_users_age', 'users', ['age'], unique=False)
     op.create_index('ix_users_code', 'users', ['code'], unique=True)
     op.create_index('ix_users_email', 'users', ['email'], unique=True)
     op.create_index('ix_users_sex', 'users', ['sex'], unique=False)
     op.create_index('ix_users_username', 'users', ['username'], unique=True)
     op.create_table('religionSurveys',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('answer', sa.String(length=100), nullable=True),
+    sa.Column('rq1', sa.String(length=20), nullable=True),
+    sa.Column('rq2', sa.String(length=20), nullable=True),
+    sa.Column('rq3', sa.String(length=20), nullable=True),
+    sa.Column('rq4', sa.String(length=20), nullable=True),
+    sa.Column('rq5', sa.String(length=20), nullable=True),
+    sa.Column('rq6', sa.String(length=20), nullable=True),
+    sa.Column('rq7', sa.String(length=20), nullable=True),
+    sa.Column('rq8', sa.String(length=20), nullable=True),
+    sa.Column('rq9', sa.String(length=20), nullable=True),
+    sa.Column('rq10', sa.String(length=20), nullable=True),
+    sa.Column('rq11', sa.String(length=20), nullable=True),
+    sa.Column('rq12', sa.String(length=20), nullable=True),
+    sa.Column('rq13', sa.String(length=20), nullable=True),
+    sa.Column('rq14', sa.String(length=20), nullable=True),
+    sa.Column('rq15', sa.String(length=20), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_religionSurveys_timestamp', 'religionSurveys', ['timestamp'], unique=False)
+    op.create_table('postSurveys_a',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('helpful_a', sa.String(length=20), nullable=True),
+    sa.Column('useful_a', sa.String(length=20), nullable=True),
+    sa.Column('curious_a', sa.String(length=20), nullable=True),
+    sa.Column('satisfy_a', sa.String(length=20), nullable=True),
+    sa.Column('annoy_a', sa.String(length=20), nullable=True),
+    sa.Column('frustrated_a', sa.String(length=20), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('author_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index('ix_postSurveys_a_timestamp', 'postSurveys_a', ['timestamp'], unique=False)
     op.create_table('postSurveys_b',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('helpful_b', sa.String(length=20), nullable=True),
@@ -70,38 +98,16 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_postSurveys_b_timestamp', 'postSurveys_b', ['timestamp'], unique=False)
-    op.create_table('postSurveys_a',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('helpful_a', sa.String(length=20), nullable=True),
-    sa.Column('useful_a', sa.String(length=20), nullable=True),
-    sa.Column('curious_a', sa.String(length=20), nullable=True),
-    sa.Column('satisfy_a', sa.String(length=20), nullable=True),
-    sa.Column('annoy_a', sa.String(length=20), nullable=True),
-    sa.Column('frustrated_a', sa.String(length=20), nullable=True),
-    sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('ix_postSurveys_a_timestamp', 'postSurveys_a', ['timestamp'], unique=False)
     op.create_table('preSurveys',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('answer', sa.String(length=100), nullable=True),
+    sa.Column('rq_int', sa.String(length=20), nullable=True),
+    sa.Column('rq_know', sa.String(length=20), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_preSurveys_timestamp', 'preSurveys', ['timestamp'], unique=False)
-    op.create_table('brainSurveys',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('answer', sa.String(length=100), nullable=True),
-    sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('ix_brainSurveys_timestamp', 'brainSurveys', ['timestamp'], unique=False)
     op.create_table('summaries',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('body', sa.Text(), nullable=True),
@@ -118,14 +124,12 @@ def downgrade():
     ### commands auto generated by Alembic - please adjust! ###
     op.drop_index('ix_summaries_timestamp', 'summaries')
     op.drop_table('summaries')
-    op.drop_index('ix_brainSurveys_timestamp', 'brainSurveys')
-    op.drop_table('brainSurveys')
     op.drop_index('ix_preSurveys_timestamp', 'preSurveys')
     op.drop_table('preSurveys')
-    op.drop_index('ix_postSurveys_a_timestamp', 'postSurveys_a')
-    op.drop_table('postSurveys_a')
     op.drop_index('ix_postSurveys_b_timestamp', 'postSurveys_b')
     op.drop_table('postSurveys_b')
+    op.drop_index('ix_postSurveys_a_timestamp', 'postSurveys_a')
+    op.drop_table('postSurveys_a')
     op.drop_index('ix_religionSurveys_timestamp', 'religionSurveys')
     op.drop_table('religionSurveys')
     op.drop_index('ix_users_username', 'users')

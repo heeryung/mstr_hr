@@ -1,14 +1,41 @@
-{% extends "lecture/class_n.html" %}
-{% block title %}Class_N3{% endblock %}
+{% extends "/lecture/class_s.html" %}
+{% block title %}Class_S4{% endblock %}
 
 
+
+{% block userPart %}
+<div class="page-header">
+	<h1> {{ user.username }} </h1>
+	<h1> {{ user.codename }} </h1>
+		
+	{% if user.name or user.code %}
+	<p>
+		{% if user.username %}{{ user.username }}{% endif %}
+		{% if user.usercode %}{{ user.codename }}{% endif %}
+	</p>
+	{% endif %}
+	{% if current_user.is_administrator() %}
+	<p><a href="mailto:{{ user.email }}">{{ user.email }}{% endif %}
+ </a></p>
+	<p> 
+	</p>
+</div>
+{% endblock %}
 
 
 
 {% block content %}
+
 	{% block socialPart %}
-	{% endblock %}	
+	<!-- pinging  -->
+	<!--div class : social -->
+	<div class="social">
+		<iframe id = "social" type="text/html" width="70" height="600" style="border:none" src = "http://127.0.0.1:5000/lecture/social" scrolling = no align = "left">
+		</iframe>	
+	</div>
 	
+	{% endblock %}
+
 
 
 
@@ -16,7 +43,7 @@
 	<!--video -->
 	<div class="page-body" style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
 		<iframe id="myPlayer" width="1024" height="576"
-		  src="https://www.youtube.com/embed/_-sEB3dHWIE?enablejsapi=1" frameborder="0" align="center">
+		  src="https://www.youtube.com/embed/yPHRf_Sm2mI?enablejsapi=1" frameborder="0" align="center">
 		</iframe>	  
 
 
@@ -101,14 +128,9 @@
 	
 	
 	
-	
-	
 	{% block nextPhase %}
 	<div id = button style = "margin:10px; padding: 10px; overflow: hidden; border: none; text-align: center;">
-		<br>
-		<br>
-		<a href = 'class_s4.html'><button type="button" class="nextPhase" style="float: center;"> Next </button></a>
-
+		<a href="summary.html"><button type="button" class="nextPhase" style="float: center;"> Summary </button></a>
 
 	</div>
 	{% endblock %}

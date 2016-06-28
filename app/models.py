@@ -265,14 +265,18 @@ class MyAdminIndexView(admin.AdminIndexView):
 class PreSurvey(db.Model):
     __tablename__ = 'preSurveys'
     id = db.Column(db.Integer, primary_key=True)
-    bq_int = db.Column(db.String(20))
-    bq_know = db.Column(db.String(20)) 
     rq_int = db.Column(db.String(20))
     rq_know = db.Column(db.String(20)) 
     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', uselist=False, backref='PreSurvey')
-    
+        
+        
+    # def __init__(self, rq_int=None, rq_know=None):
+    #     self.rq_int = rq_int
+    #     self.rq_know = rq_know
+
+
 
 
 class PostSurvey_A(db.Model):
@@ -328,24 +332,61 @@ class PostSurvey_B(db.Model):
         self.gender = gender 
         self.age = age
     
-    
 
-class BrainSurvey(db.Model):
-    __tablename__ = 'brainSurveys'
-    id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.String(100))
-    timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('User', uselist=False, backref='BrainSurvey')    
+
+    
+#
+# class BrainSurvey(db.Model):
+#     __tablename__ = 'brainSurveys'
+#     id = db.Column(db.Integer, primary_key=True)
+#     answer = db.Column(db.String(100))
+#     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+#     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     user = db.relationship('User', uselist=False, backref='BrainSurvey')
+
 
 
 class ReligionSurvey(db.Model):
     __tablename__ = 'religionSurveys'
     id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.String(100))
+    rq1 = db.Column(db.String(20))
+    rq2 = db.Column(db.String(20))
+    rq3 = db.Column(db.String(20))
+    rq4 = db.Column(db.String(20))
+    rq5 = db.Column(db.String(20))
+    rq6 = db.Column(db.String(20))
+    rq7 = db.Column(db.String(20))
+    rq8 = db.Column(db.String(20))
+    rq9 = db.Column(db.String(20))
+    rq10 = db.Column(db.String(20))
+    rq11 = db.Column(db.String(20))
+    rq12 = db.Column(db.String(20))
+    rq13 = db.Column(db.String(20))
+    rq14 = db.Column(db.String(20))
+    rq15 = db.Column(db.String(20))
+            
     timestamp = db.Column(db.DateTime, index=True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', uselist=False, backref='ReligionSurvey')
+
+    def __init__(self, rq1=None, rq2=None, rq3=None, rq4=None, rq5=None, rq6=None, rq7=None, rq8=None, rq9=None, rq10=None, rq11=None, rq12=None, rq13=None, rq14=None, rq15=None):
+        self.rq1 = rq1
+        self.rq2 = rq2
+        self.rq3 = rq3
+        self.rq4 = rq4
+        self.rq5 = rq5
+        self.rq6 = rq6
+        self.rq7 = rq7
+        self.rq8 = rq8
+        self.rq9 = rq9
+        self.rq10 = rq10
+        self.rq11 = rq11
+        self.rq12 = rq12
+        self.rq13 = rq13
+        self.rq14 = rq14
+        self.rq15 = rq15
+
+
     
     
 
